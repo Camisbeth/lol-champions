@@ -1,24 +1,67 @@
-const DATA_CHAMPS = prompt(
-  "LOL Champions! \nIngrese nombre para conocer sus habilidades:"
+// HAGO EL PEDIDO DEL INGRESO DE NOMBRE DE NUESTRO CAMPEON PARA BUSCAR LA INFORMACION DEL MISMO Y PODER COMPARARLO
+const DATA_FIRST_CHAMPS = prompt(
+  "Ingrese nombre para comparar campeones:"
 );
 
-const NORMALIZED_NAME = DATA_CHAMPS.toLocaleLowerCase().replace(" ", "");
+const DATA_SECOND_CHAMPS = prompt(
+  "Ingrese nombre para comparar campeones:"
+);
 
-if (NORMALIZED_NAME in champs) {
-  const CHAMP = champs[NORMALIZED_NAME];
-  alert(
-    `${CHAMP.name} \n${CHAMP.title} \n${CHAMP.blurb} \n${getTags(CHAMP.tags)}`
-  );
+// NORMALIZO LA ENTRADA DE DATOS PARA QUE PUEDA ENCONTRARLOS DENTRO DEL ARRAY.
+const NORMALIZED_FIRST_NAME = DATA_FIRST_CHAMPS.toLocaleLowerCase().replace(" ", "");
+const NORMALIZED_SECOND_NAME = DATA_SECOND_CHAMPS.toLocaleLowerCase().replace(" ", "");
+
+// PREGUNTAMOS SI EXISTE EL CAMPEON EN NUESTRA "BASE DE DATOS"
+function searchChampion(nameChamp){
+if (nameChamp in champs) {
+
+  const CHAMP = champs[nameChamp];
+  showChampion(CHAMP)
+
 } else {
   alert("No se encontró el campeón! :(");
+}}
+
+// RECORRO EL ARRAY PARA TRAER LAS ETIQUETAS DE SU ESPECIALIDAD
+function getTags(tagsList) {
+  return tagsList.join(" ");
 }
 
-function getTags(tagsList) {
-  let tags = "";
+// MUESTRO EN PANTALLA A LOS DOS CAMPEONES SELECCIONADOS PARA PODER COMPARARLOS
+function showChampion(champ){
+  const SECTION_CARD = document.getElementById("sectionCard")
 
-  for (let i = 0; i < tagsList.length; i++) {
-    tags += tagsList[i] + " ";
+
+  if(champ.name){
+    const CHAMP_NAME = document.createElement("p")
+    CHAMP_NAME.innerHTML = champ.name
+    SECTION_CARD.appendChild(CHAMP_NAME)
   }
 
-  return tags;
+
+  if(champ.title){
+
+    const  CHAMP_TITLE = document.createElement("p")
+    CHAMP_TITLE.innerHTML = champ.title
+    SECTION_CARD.appendChild(CHAMP_TITLE)
+  }
+
+  if(champ.blurb){
+    
+      const  CHAMP_BLURB = document.createElement("p")
+      CHAMP_BLURB.innerHTML = champ.blurb
+      SECTION_CARD.appendChild(CHAMP_BLURB)
+
+  }
+
+  if(champ.tags && Array.isArray(champ.tags)){
+    const  CHAMP_TAGS = document.createElement("p")
+    CHAMP_TAGS.innerHTML = getTags(champ.tags)
+    SECTION_CARD.appendChild(CHAMP_TAGS)  
+  }
+
 }
+
+
+searchChampion(NORMALIZED_FIRST_NAME)
+searchChampion(NORMALIZED_SECOND_NAME)
