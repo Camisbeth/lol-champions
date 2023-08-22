@@ -1,26 +1,35 @@
-// HAGO EL PEDIDO DEL INGRESO DE NOMBRE DE NUESTRO CAMPEON PARA BUSCAR LA INFORMACION DEL MISMO Y PODER COMPARARLO
-const DATA_FIRST_CHAMPS = prompt("Ingrese nombre para comparar campeones:");
+// HAGO EL PEDIDO DEL INGRESO DE NOMBRE DE NUESTRO CAMPEON PARA BUSCAR LA INFORMACION DEL MISMO Y PODER COMPARARLO.
 
-const DATA_SECOND_CHAMPS = prompt("Ingrese nombre para comparar campeones:");
+function logKey(e) {
+  if (e.key == "Enter") {
+    const DATA_CHAMP = e.target.value;
+    const NORMALIZED_CHAMP = DATA_CHAMP.toLocaleLowerCase().replace(" ", "");
+    searchChampion(NORMALIZED_CHAMP);
+    e.target.value = "";
+  }
+}
 
-// NORMALIZO LA ENTRADA DE DATOS PARA QUE PUEDA ENCONTRARLOS DENTRO DEL ARRAY.
-const NORMALIZED_FIRST_NAME = DATA_FIRST_CHAMPS.toLocaleLowerCase().replace(
-  " ",
-  ""
-);
-const NORMALIZED_SECOND_NAME = DATA_SECOND_CHAMPS.toLocaleLowerCase().replace(
-  " ",
-  ""
-);
+const input = document.getElementById("input");
+input.addEventListener("keydown", (e) => logKey(e));
 
-// PREGUNTAMOS SI EXISTE EL CAMPEON EN NUESTRA "BASE DE DATOS"
+// PREGUNTO SI EXISTE EL CAMPEON EN NUESTRA "BASE DE DATOS"
 function searchChampion(nameChamp) {
   if (nameChamp in champs) {
     const CHAMP = champs[nameChamp];
-    showChampion(CHAMP);
+
+    getChampLocalStorage(CHAMP);
+
+    showChampion();
   } else {
     alert("No se encontró el campeón! :(");
   }
+}
+
+// GUARDAMOS AL CAMPEON EN LOCAL STORAGE PARA GENERAR UN POTENCIAL "HISTORIAL DE BUSQUEDA", LO RECORREMOS Y MOSTRAMOS LOS DOS ULTIMOS:
+function getChampLocalStorage(champ) {
+  const existingChamps = JSON.parse(localStorage.getItem("champs")) || [];
+  existingChamps.push(champ);
+  localStorage.setItem("champs", JSON.stringify(existingChamps));
 }
 
 // RECORRO EL ARRAY PARA TRAER LAS ETIQUETAS DE SU ESPECIALIDAD
@@ -31,32 +40,33 @@ function getTags(tagsList) {
 // MUESTRO EN PANTALLA A LOS DOS CAMPEONES SELECCIONADOS PARA PODER COMPARARLOS
 function showChampion(champ) {
   const SECTION_CARD = document.getElementById("sectionCard");
+  const CHAMP = JSON.parse(localStorage.getItem("champs"));
 
-  if (champ.name) {
+  if (CHAMP.name) {
     const CHAMP_NAME = document.createElement("p");
-    CHAMP_NAME.innerHTML = champ.name;
+    CHAMP_NAME.innerHTML = CHAMP.name;
     SECTION_CARD.appendChild(CHAMP_NAME);
   }
 
-  if (champ.title) {
+  if (CHAMP.title) {
     const CHAMP_TITLE = document.createElement("p");
-    CHAMP_TITLE.innerHTML = champ.title;
+    CHAMP_TITLE.innerHTML = CHAMP.title;
     SECTION_CARD.appendChild(CHAMP_TITLE);
   }
 
-  if (champ.blurb) {
+  if (CHAMP.blurb) {
     const CHAMP_BLURB = document.createElement("p");
-    CHAMP_BLURB.innerHTML = champ.blurb;
+    CHAMP_BLURB.innerHTML = CHAMP.blurb;
     SECTION_CARD.appendChild(CHAMP_BLURB);
   }
 
-  if (champ.tags && Array.isArray(champ.tags)) {
+  if (CHAMP.tags && Array.isArray(CHAMP.tags)) {
     const CHAMP_TAGS = document.createElement("p");
 
     // EN ESTA PARTE HAGO UNA PEQUEÑA BÚSQUEDA Y FILTRADO EN EL ARRAY DE TAGS, PARA "PINTAR" DE UN COLOR AZUL A LOS CAMPEONES MAGOS. ESTO LO PIENSO ESCALAR, EVENTUALMENTE, CUANDO TRABAJE CON LA API.
 
     // BUSCO LA COINCIDENCIA DEL TAG CON MAGO:
-    const TAG_EXISTS = champ.tags.some((tag) =>
+    const TAG_EXISTS = CHAMP.tags.some((tag) =>
       tag.toLocaleLowerCase().includes("mage")
     );
 
@@ -64,10 +74,7 @@ function showChampion(champ) {
     const COLOR_STYLE = TAG_EXISTS ? "color: blue" : "";
 
     CHAMP_TAGS.style = COLOR_STYLE;
-    CHAMP_TAGS.innerHTML = getTags(champ.tags);
+    CHAMP_TAGS.innerHTML = getTags(CHAMP.tags);
     SECTION_CARD.appendChild(CHAMP_TAGS);
   }
 }
-
-searchChampion(NORMALIZED_FIRST_NAME);
-searchChampion(NORMALIZED_SECOND_NAME);
