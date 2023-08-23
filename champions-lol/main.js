@@ -3,8 +3,11 @@
 function logKey(e) {
   if (e.key == "Enter") {
     const DATA_CHAMP = e.target.value;
+
     const NORMALIZED_CHAMP = DATA_CHAMP.toLocaleLowerCase().replace(" ", "");
+
     searchChampion(NORMALIZED_CHAMP);
+
     e.target.value = "";
   }
 }
@@ -12,8 +15,18 @@ function logKey(e) {
 const input = document.getElementById("input");
 input.addEventListener("keydown", (e) => logKey(e));
 
+// LLAMO AL BOTON Y CREO LA FUNCION DE ELIMINAR INFORMACION DEL LOCAL STORAGE
+function eliminateLS() {
+  localStorage.clear();
+}
+
+const BUTTON_LS = document.getElementById("button");
+BUTTON_LS.addEventListener("click", eliminateLS);
+
 // PREGUNTO SI EXISTE EL CAMPEON EN NUESTRA "BASE DE DATOS"
 function searchChampion(nameChamp) {
+  const CHAMP_LS = JSON.parse(localStorage.getItem("champs"));
+
   if (nameChamp in champs) {
     const CHAMP = champs[nameChamp];
 
@@ -38,43 +51,47 @@ function getTags(tagsList) {
 }
 
 // MUESTRO EN PANTALLA A LOS DOS CAMPEONES SELECCIONADOS PARA PODER COMPARARLOS
-function showChampion(champ) {
+function showChampion() {
   const SECTION_CARD = document.getElementById("sectionCard");
   const CHAMP = JSON.parse(localStorage.getItem("champs"));
 
-  if (CHAMP.name) {
-    const CHAMP_NAME = document.createElement("p");
-    CHAMP_NAME.innerHTML = CHAMP.name;
-    SECTION_CARD.appendChild(CHAMP_NAME);
-  }
+  SECTION_CARD.innerHTML = "";
 
-  if (CHAMP.title) {
-    const CHAMP_TITLE = document.createElement("p");
-    CHAMP_TITLE.innerHTML = CHAMP.title;
-    SECTION_CARD.appendChild(CHAMP_TITLE);
-  }
+  CHAMP.forEach((CHAMP) => {
+    if (CHAMP.name) {
+      const CHAMP_NAME = document.createElement("p");
+      CHAMP_NAME.innerHTML = CHAMP.name;
+      SECTION_CARD.appendChild(CHAMP_NAME);
+    }
 
-  if (CHAMP.blurb) {
-    const CHAMP_BLURB = document.createElement("p");
-    CHAMP_BLURB.innerHTML = CHAMP.blurb;
-    SECTION_CARD.appendChild(CHAMP_BLURB);
-  }
+    if (CHAMP.title) {
+      const CHAMP_TITLE = document.createElement("p");
+      CHAMP_TITLE.innerHTML = CHAMP.title;
+      SECTION_CARD.appendChild(CHAMP_TITLE);
+    }
 
-  if (CHAMP.tags && Array.isArray(CHAMP.tags)) {
-    const CHAMP_TAGS = document.createElement("p");
+    if (CHAMP.blurb) {
+      const CHAMP_BLURB = document.createElement("p");
+      CHAMP_BLURB.innerHTML = CHAMP.blurb;
+      SECTION_CARD.appendChild(CHAMP_BLURB);
+    }
 
-    // EN ESTA PARTE HAGO UNA PEQUEÑA BÚSQUEDA Y FILTRADO EN EL ARRAY DE TAGS, PARA "PINTAR" DE UN COLOR AZUL A LOS CAMPEONES MAGOS. ESTO LO PIENSO ESCALAR, EVENTUALMENTE, CUANDO TRABAJE CON LA API.
+    if (CHAMP.tags && Array.isArray(CHAMP.tags)) {
+      const CHAMP_TAGS = document.createElement("p");
 
-    // BUSCO LA COINCIDENCIA DEL TAG CON MAGO:
-    const TAG_EXISTS = CHAMP.tags.some((tag) =>
-      tag.toLocaleLowerCase().includes("mage")
-    );
+      // EN ESTA PARTE HAGO UNA PEQUEÑA BÚSQUEDA Y FILTRADO EN EL ARRAY DE TAGS, PARA "PINTAR" DE UN COLOR AZUL A LOS CAMPEONES MAGOS. ESTO LO PIENSO ESCALAR, EVENTUALMENTE, CUANDO TRABAJE CON LA API.
 
-    // SI ALGUNO DE LOS TAGS COINCIDE, APLICO EL COLOR AZUL AL TAG:
-    const COLOR_STYLE = TAG_EXISTS ? "color: blue" : "";
+      // BUSCO LA COINCIDENCIA DEL TAG CON MAGO:
+      const TAG_EXISTS = CHAMP.tags.some((tag) =>
+        tag.toLocaleLowerCase().includes("mage")
+      );
 
-    CHAMP_TAGS.style = COLOR_STYLE;
-    CHAMP_TAGS.innerHTML = getTags(CHAMP.tags);
-    SECTION_CARD.appendChild(CHAMP_TAGS);
-  }
+      // SI ALGUNO DE LOS TAGS COINCIDE, APLICO EL COLOR AZUL AL TAG:
+      const COLOR_STYLE = TAG_EXISTS ? "color: blue" : "";
+
+      CHAMP_TAGS.style = COLOR_STYLE;
+      CHAMP_TAGS.innerHTML = getTags(CHAMP.tags);
+      SECTION_CARD.appendChild(CHAMP_TAGS);
+    }
+  });
 }
