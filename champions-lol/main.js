@@ -25,8 +25,6 @@ BUTTON_LS.addEventListener("click", eliminateLS);
 
 // PREGUNTO SI EXISTE EL CAMPEON EN NUESTRA "BASE DE DATOS"
 function searchChampion(nameChamp) {
-  const CHAMP_LS = JSON.parse(localStorage.getItem("champs"));
-
   if (nameChamp in champs) {
     const CHAMP = champs[nameChamp];
 
