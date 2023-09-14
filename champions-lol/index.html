@@ -3,18 +3,47 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" src="style.css">
+    <link href="output.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <link rel="icon" href="./public/logol (1).png" />
     <title>LOL Champions</title>
   </head>
-  <body>
-    <h1 class="title">LOL Champions!</h1>
-    
-   <input id="input">
-   <button id="button">Borrar historial</button>
+  <body class="bg-background">
+    <figure class="flex justify-cente max-w-figure mt-4 mx-auto">
+      <img src="./public/logo-lol.png" />
+    </figure>
 
-    <section id="sectionCard"></section>
-    
-    <script src="champs.js"></script>
-    <script src="main.js"></script>
+    <h1
+      class="font-custom text-textcolor text-center mb-4 text-2xl font-bold tracking-widest"
+    >
+      COMPARADOR DE CAMPEONES
+    </h1>
+
+    <section class="flex justify-center flex-wrap gap-2">
+      <input
+        class="min-w-input bg-inputcolor border-solid border-2 border-borderinputcolor outline-none rounded-md font-custom text-button w-1/4 pl-2"
+        id="input"
+        placeholder="Buscar campeón"
+      />
+      <button class="bg-button rounded-md w-36 min-w-button" id="button">
+        Limpiar
+      </button>
+    </section>
+
+    <section
+      class="flex justify-center mt-4 mb-2 gap-2 flex-wrap"
+      id="sectionCard"
+    ></section>
+
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <script type="module" src="main.js"></script>
   </body>
 </html>
