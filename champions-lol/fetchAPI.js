@@ -1,15 +1,28 @@
-import { getChampLocalStorage, getExistingChamps } from "./localStorage.js";
+import {
+  getChampLocalStorage,
+  getExistingChamps,
+  getAllChampionsLocalStorage,
+  saveAllChampsData,
+} from "./localStorage.js";
 import { showChampion } from "./DOM.js";
 
 //PIDO LA INFORMACIÓN A LA API DE RIOT GAMES DE TODOS LOS CAMPEONES
-async function champs() {
+export async function champs() {
   try {
-    const PROMISE = await fetch(
-      "https://ddragon.leagueoflegends.com/cdn/13.17.1/data/es_AR/champion.json"
-    );
-    const RESPONSE = await PROMISE.json();
+    const champs = getAllChampionsLocalStorage();
+    if (!champs) {
+      // INTENTO DE HACER UNA ESPECIA DE CACHÉ CON EL LOCAL STORAGE
+      const PROMISE = await fetch(
+        "https://ddragon.leagueoflegends.com/cdn/13.17.1/data/es_AR/champion.json"
+      );
+      const RESPONSE = await PROMISE.json();
 
-    return RESPONSE.data;
+      saveAllChampsData(RESPONSE.data);
+
+      return RESPONSE.data;
+    }
+
+    return champs;
   } catch (error) {
     console.log(error);
 

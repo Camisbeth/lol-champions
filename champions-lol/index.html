@@ -24,15 +24,21 @@
       COMPARADOR DE CAMPEONES
     </h1>
 
-    <section class="flex justify-center flex-wrap gap-2">
-      <input
-        class="min-w-input bg-inputcolor border-solid border-2 border-borderinputcolor outline-none rounded-md font-custom text-button w-1/4 pl-2"
-        id="input"
-        placeholder="Buscar campeón"
-      />
-      <button class="bg-button rounded-md w-36 min-w-button" id="button">
-        Limpiar
-      </button>
+    <section class="flex justify-center">
+      <section
+        class="gap-2 relative bg-inputcolor border-solid border-2 border-borderinputcolor rounded-md flex justify-between"
+      >
+        <input
+          id="input"
+          placeholder="Buscar campeón"
+          class="pl-2 bg-transparent outline-none font-custom text-button"
+        />
+        <section
+          id="suggestions"
+          class="w-full bg-inputcolor outline-none rounded-md font-custom text-button absolute top-8 z-10 m-0"
+        ></section>
+        <button class="rounded-md pr-2" id="button">🗑️</button>
+      </section>
     </section>
 
     <section

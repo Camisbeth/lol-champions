@@ -3,8 +3,13 @@ body {
   cursor: url("./public/pointer.png"), auto;
 }
 
-input,
-button {
+input {
+  background: none;
+}
+
+.inputContainer,
+button,
+.suggestion {
   cursor: url("./public/pointerhover.png"), auto;
 }
 

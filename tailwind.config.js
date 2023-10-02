@@ -2,10 +2,6 @@
 module.exports = {
   content: ["./champions-lol/**/*.{html,js}"],
   theme: {
-    minWidth: {
-      input: "150px",
-      button: "50px",
-    },
     maxWidth: {
       figure: "500px",
     },

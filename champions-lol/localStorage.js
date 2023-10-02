@@ -7,6 +7,35 @@ export function getChampLocalStorage(champ) {
   localStorage.setItem("champs", JSON.stringify(existingChamps));
 }
 
+export function getAllChampionsLocalStorage() {
+  const champs = localStorage.getItem("api");
+
+  if (champs) {
+    return JSON.parse(champs);
+  }
+
+  return;
+}
+
+export function saveAllChampsData(data) {
+  localStorage.setItem("api", JSON.stringify(data));
+}
+
+export function eliminateChampsFromLs() {
+  localStorage.removeItem("champs");
+
+  return Toastify({
+    text: "Campeones eliminados correctamente",
+    duration: 3000,
+    gravity: "bottom",
+    position: "right",
+    stopOnFocus: true,
+    style: {
+      background: "linear-gradient(to right, #C89B3C, #785A28)",
+    },
+  }).showToast();
+}
+
 export function eliminateLS() {
   localStorage.clear();
 }
@@ -27,4 +56,15 @@ export function removeChampFromLS(targetChamp) {
   );
 
   localStorage.setItem("champs", JSON.stringify(filteredChamps));
+
+  return Toastify({
+    text: `${targetChamp.name} eliminado correctamente`,
+    duration: 3000,
+    gravity: "bottom",
+    position: "right",
+    stopOnFocus: true,
+    style: {
+      background: "linear-gradient(to right, #C89B3C, #785A28)",
+    },
+  }).showToast();
 }

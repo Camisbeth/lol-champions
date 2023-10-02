@@ -1,8 +1,10 @@
 import {
-  eliminateLS,
+  eliminateChampsFromLs,
   getExistingChamps,
   removeChampFromLS,
 } from "./localStorage.js";
+import { champs, searchChampion } from "./fetchAPI.js";
+import { normalizeString } from "./utilities.js";
 
 // TRANSFORMO ETIQUETAS A UN STRING
 export function getTags(tagsList) {
@@ -128,10 +130,59 @@ function deleteAllChampions() {
   }
 }
 
+export async function createSuggestion(partialName) {
+  const champions = await champs();
+  const normalizedPartialName = normalizeString(partialName);
+
+  const names = Object.keys(champions);
+
+  const filteredChamps = names.filter((name) => {
+    return name.toLowerCase().includes(normalizedPartialName);
+  });
+
+  if (filteredChamps.length > 5) {
+    filteredChamps.splice(5, filteredChamps.length - 5);
+  }
+  const suggestions = document.getElementById("suggestions");
+
+  while (suggestions.firstChild) {
+    suggestions.removeChild(suggestions.lastChild);
+  }
+
+  if (!partialName) {
+    return;
+  }
+
+  filteredChamps.forEach((champ) => {
+    const suggestion = document.createElement("div");
+    const img = document.createElement("img");
+    const name = document.createElement("p");
+
+    img.alt = champ;
+    img.src = `https://ddragon.leagueoflegends.com/cdn/13.17.1/img/champion/${champ}.png`;
+
+    suggestion.className =
+      "text-colorTextCard w-1/4 pl-2 suggestion flex flex-row gap-2 w-full";
+
+    name.innerHTML = champ;
+
+    suggestion.addEventListener("click", (e) => {
+      const input = document.getElementById("input");
+      searchChampion(champions[champ].name);
+      input.value = "";
+      e.target.parentNode.innerHTML = "";
+    });
+
+    suggestion.appendChild(img);
+    suggestion.appendChild(name);
+    suggestions.appendChild(suggestion);
+  });
+}
+
 const BUTTON_LS = document.getElementById("button");
 BUTTON_LS.addEventListener("click", () => {
   // LIMPIO EL LOCALSTORAGE Y EL RENDERIZADO
-  eliminateLS();
+  eliminateChampsFromLs();
   deleteAllChampions();
 });
 
